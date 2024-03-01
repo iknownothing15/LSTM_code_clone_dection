@@ -28,7 +28,7 @@ By default, the script will load the data, train the model, and evaluate its per
 
 ## Author's idle talk
 
-We comeplete it while doing our student project of Harbing Institution of Technology.
+We comeplete it while doing our student project of Harbing Institute of Technology.
 
 In our origin project, we wish to implement an CDLH base code clone dection AI model according to [this paper](https://dl.acm.org/doi/10.5555/3172077.3172312)
 
