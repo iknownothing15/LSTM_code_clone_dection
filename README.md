@@ -21,7 +21,7 @@ To use this script, you need to have a dataset of sentence pairs and their corre
 You can run the script using the following command:
 
 ```bash
-python Fake_CDLH_Main.py
+python LSTM_Main.py
 ```
 
 By default, the script will load the data, train the model, and evaluate its performance. You can comment out the `train` or `evaluate` function calls in the `if __name__ == '__main__':` block to skip training or evaluation.
