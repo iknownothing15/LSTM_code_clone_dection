@@ -3,8 +3,7 @@ import torch.nn as nn
 import torch.nn.functional as functional
 import torch.optim as optim
 import random
-from scripts.preposs import read_data,init
-
+from scripts.preposs import read_data,init,parser_single,read_dict
 EMBEDDING_DIM=32
 HIDDEN_DIM=16
 
@@ -12,7 +11,13 @@ torch.random.manual_seed(1)
 random.seed(114514)
 
 def prepare_sequence(sentence,word_dict):
-    idxs=[word_dict[word] for word in sentence]
+    # idxs=[word_dict[word] for word in sentence]
+    idxs=[]
+    for word in sentence:
+        if word in word_dict:
+            idxs.append(word_dict[word])
+        else:
+            idxs.append(0)
     return torch.tensor(idxs)
 
 class MyModule(nn.Module):
@@ -100,8 +105,25 @@ def evaluate(test_pairs,word_dict):
             total += 1
     print('Accuracy of the model on the test pairs: {}%'.format(100 * correct / total))
 
+def evaluate_single(file1,file2,word_dict):
+    model=torch.load('model.pt')
+    sentence_1=parser_single(file1)
+    sentence_2=parser_single(file2)
+    sentence_in_1=prepare_sequence(sentence_1,word_dict)
+    sentence_in_2=prepare_sequence(sentence_2,word_dict)
+    min_size=min(len(sentence_1),len(sentence_2))
+    index=-min_size
+    tag_scores_1=model(sentence_in_1)[index:]
+    tag_scores_2=model(sentence_in_2)[index:]
+    distance=functional.pairwise_distance(tag_scores_1.view(1,-1),tag_scores_2.view(1,-1),p=1)
+    predict=100*(1-distance.item())
+    print('Similarity between %s and %s is %f' % (file1,file2,predict))
+    
+
 if __name__ == '__main__':
     # init()
-    training_pairs,test_pairs,word_dict=read_data()
+    # training_pairs,test_pairs,word_dict=read_data()
     # train(training_pairs,word_dict)
-    evaluate(test_pairs+training_pairs,word_dict)
+    # evaluate(test_pairs+training_pairs,word_dict)
+    word_dict=read_dict()
+    evaluate_single('./data/inference/1.cpp','./data/inference/2.cpp',word_dict)

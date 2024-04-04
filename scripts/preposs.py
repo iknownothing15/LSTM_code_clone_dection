@@ -33,6 +33,12 @@ def join_dir(path):
     pairs=init_pairs(data,name_to_id,mapping)
     return data,pairs
 
+def parser_single(file):
+    ast=parse_file(file,use_cpp=False)
+    visitor=MyVisitor()
+    visitor.visit(ast)
+    return visitor.values
+
 def init():
     training_data,training_pairs=join_dir('data/training/')
     with open('temp/training_data.pkl','wb') as file_training_data:
@@ -73,6 +79,11 @@ def read_data():
     random.shuffle(training_pairs)
     random.shuffle(test_pairs)
     return training_pairs,test_pairs,word_dict
+
+def read_dict():
+    with open('temp/word_dict.pkl','rb') as file_word_dict:
+        word_dict=pickle.load(file_word_dict)
+    return word_dict
 
 if __name__ == '__main__':
     init()
