@@ -116,7 +116,8 @@ def evaluate_single(file1,file2,word_dict):
     tag_scores_1=model(sentence_in_1)[index:]
     tag_scores_2=model(sentence_in_2)[index:]
     distance=functional.pairwise_distance(tag_scores_1.view(1,-1),tag_scores_2.view(1,-1),p=1)
-    predict=100*(1-distance.item())
+    re_distance=distance.item() if distance.item()>0 else 0
+    predict=100*(1-re_distance)
     print('Similarity between %s and %s is %f' % (file1,file2,predict))
     
 
