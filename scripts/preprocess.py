@@ -3,6 +3,7 @@ import random
 import pickle
 from pycparser import parse_file
 from scripts.myVisitor import MyVisitor
+import pygame
 random.seed(114514)
 def init_pairs(data,name_to_id,pairs):
     data_pairs=[]
@@ -84,6 +85,14 @@ def read_dict():
     with open('temp/word_dict.pkl','rb') as file_word_dict:
         word_dict=pickle.load(file_word_dict)
     return word_dict
+
+def play_haruhikage():
+    #file: temp/haruhikage.mp3
+    pygame.mixer.init()
+    pygame.mixer.music.load('temp/haruhikage.mp3')
+    pygame.mixer.music.play()
+    while pygame.mixer.music.get_busy():
+        pygame.time.Clock().tick(10)
 
 if __name__ == '__main__':
     init()
